@@ -1,12 +1,18 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, Button} from 'react-native';
 import {MainLayout} from './';
+import {SIZES} from '../constants';
 
 const Home = () => {
   return (
     <MainLayout>
       <View>
-        <Text>Home</Text>
+        <Button
+          title="hello"
+          onPress={() => {
+            console.log('test');
+          }}
+        />
       </View>
     </MainLayout>
   );

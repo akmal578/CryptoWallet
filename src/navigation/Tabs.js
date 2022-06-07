@@ -41,25 +41,48 @@ const Tabs = ({setTradeModalVisibility, isTradeModalVisible}) => {
         component={Home}
         options={{
           tabBarIcon: ({focused}) => {
-            return <TabIcon focused={focused} icon={icons.home} label="Home" />;
+            if (!isTradeModalVisible) {
+              return (
+                <TabIcon focused={focused} icon={icons.home} label="Home" />
+              );
+            }
+          },
+        }}
+        //Prevent button received clicked
+        listeners={{
+          tabPress: e => {
+            if (isTradeModalVisible) {
+              e.preventDefault();
+            }
           },
         }}
       />
+
       <Tab.Screen
         name="Portfolio"
         component={Portfolio}
         options={{
           tabBarIcon: ({focused}) => {
-            return (
-              <TabIcon
-                focused={focused}
-                icon={icons.briefcase}
-                label="Portfolio"
-              />
-            );
+            if (!isTradeModalVisible) {
+              return (
+                <TabIcon
+                  focused={focused}
+                  icon={icons.briefcase}
+                  label="Portfolio"
+                />
+              );
+            }
+          },
+        }}
+        listeners={{
+          tabPress: e => {
+            if (isTradeModalVisible) {
+              e.preventDefault();
+            }
           },
         }}
       />
+
       <Tab.Screen
         name="Trade"
         component={Home}
@@ -68,7 +91,8 @@ const Tabs = ({setTradeModalVisibility, isTradeModalVisible}) => {
             return (
               <TabIcon
                 focused={focused}
-                icon={icons.trade}
+                icon={isTradeModalVisible ? icons.close : icons.trade}
+                iconStyle={isTradeModalVisible ? {width: 15, height: 15} : null}
                 label="Trade"
                 isTrade={true}
               />
@@ -90,9 +114,11 @@ const Tabs = ({setTradeModalVisibility, isTradeModalVisible}) => {
         component={Market}
         options={{
           tabBarIcon: ({focused}) => {
-            return (
-              <TabIcon focused={focused} icon={icons.market} label="Market" />
-            );
+            if (!isTradeModalVisible) {
+              return (
+                <TabIcon focused={focused} icon={icons.market} label="Market" />
+              );
+            }
           },
         }}
       />
@@ -101,17 +127,21 @@ const Tabs = ({setTradeModalVisibility, isTradeModalVisible}) => {
         component={Profile}
         options={{
           tabBarIcon: ({focused}) => {
-            return (
-              <TabIcon focused={focused} icon={icons.profile} label="Profile" />
-            );
+            if (!isTradeModalVisible) {
+              return (
+                <TabIcon
+                  focused={focused}
+                  icon={icons.profile}
+                  label="Profile"
+                />
+              );
+            }
           },
         }}
       />
     </Tab.Navigator>
   );
 };
-
-// export default Tabs;
 
 function mapStatetoProps(state) {
   return {
