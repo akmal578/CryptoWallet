@@ -1,21 +1,86 @@
 import React from 'react';
-import {View, Text, Button} from 'react-native';
-import {MainLayout} from './';
-import {SIZES} from '../constants';
+import {View, Text} from 'react-native';
 
-const Home = () => {
+import {connect} from 'react-redux';
+import {getHoldings, getCoinMarket} from '../stores/market/marketActions';
+import {useFocusEffect} from '@react-navigation/native';
+
+import {MainLayout} from './';
+
+import {SIZES, COLORS, FONTS, dummyData, icons} from '../constants';
+
+const Home = ({getHoldings, getCoinMarket, myHoldings, coins}) => {
+  useFocusEffect(
+    React.useCallback(() => {
+      getHoldings((holdings = dummyData.holdings));
+      getCoinMarket();
+    }, []),
+  );
+
   return (
     <MainLayout>
       <View>
-        <Button
-          title="hello"
-          onPress={() => {
-            console.log('test');
-          }}
-        />
+        <Text>Home</Text>
       </View>
     </MainLayout>
   );
 };
 
-export default Home;
+function mapStatetoProps(state) {
+  return {
+    myHoldings: state.marketReducer.myHoldings,
+    coins: state.marketReducer.coins,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    getHoldings: (
+      holdings,
+      currency,
+      coinList,
+      orderBy,
+      sparkline,
+      priceChangePerc,
+      perPage,
+      page,
+    ) => {
+      return dispatch(
+        getHoldings(
+          holdings,
+          currency,
+          coinList,
+          orderBy,
+          sparkline,
+          priceChangePerc,
+          perPage,
+          page,
+        ),
+      );
+    },
+
+    getCoinMarket: (
+      currency,
+      coinList,
+      orderBy,
+      sparkline,
+      priceChangePerc,
+      perPage,
+      page,
+    ) => {
+      return dispatch(
+        getCoinMarket(
+          currency,
+          coinList,
+          orderBy,
+          sparkline,
+          priceChangePerc,
+          perPage,
+          page,
+        ),
+      );
+    },
+  };
+}
+
+export default connect(mapStatetoProps, mapDispatchToProps)(Home);
